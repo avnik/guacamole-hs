@@ -1,10 +1,11 @@
 module Network.Guacamole.Client.Types (
-                                       GuacamoleClientRequest
+                                       GuacamoleClientRequest(..)
     ) where
 
-import           Data.ByteString         (ByteString)
-import           Network.Guacamole.Types (GuacamoleSize, GuacamoleXY,
-                                          PipeRequest, PipeStatus)
+import           Universum
+
+import           Data.ByteString (ByteString)
+import           Network.Guacamole.Types (GuacamoleSize, GuacamoleXY, PipeRequest, PipeStatus)
 
 data GuacamoleClientRequest =
     Sync
@@ -23,7 +24,7 @@ data GuacamoleClientRequest =
         }
   | Disconnect
   | Size
-        { gcrSize      :: !GuacamoleXY
+        { gcrSize      :: !GuacamoleSize
         }
   | File
         { gcrFile      :: !PipeRequest
@@ -48,7 +49,7 @@ data GuacamoleClientRequest =
   | Put
         { gcrObject :: !Int
         , gcrStream :: !Int
-        , gcrMime   :: !Int
+        , gcrMime   :: !ByteString
         , gcrName   :: !ByteString
         }
   | Audio

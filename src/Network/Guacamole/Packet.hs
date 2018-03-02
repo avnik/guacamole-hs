@@ -1,3 +1,5 @@
+{-# LANGUAGE CPP #-}
+
 module Network.Guacamole.Packet (
                                   GuacamolePacket(..)
                                 , buildGuacamolePacket
@@ -5,6 +7,8 @@ module Network.Guacamole.Packet (
                                 , mkGuacamolePacket
     )
     where
+
+import           Universum
 
 import           Data.Attoparsec.ByteString       (Parser (..), parseOnly)
 import           Data.Attoparsec.ByteString.Char8 (char, decimal)
@@ -16,8 +20,13 @@ import           Data.ByteString.Builder          (Builder, byteString, char7,
                                                    intDec, toLazyByteString)
 import qualified Data.ByteString.Char8            as BSC8
 import qualified Data.ByteString.Lazy             as LBS8
-import           Data.Foldable                    (foldMap)
-import           Data.Monoid
+
+
+-- From guacamole/parser-constants.h
+#define GUAC_INSTRUCTION_MAX_LENGTH 8192
+#define GUAC_INSTRUCTION_MAX_DIGITS 5
+#define GUAC_INSTRUCTION_MAX_ELEMENTS 64
+
 
 data GuacamolePacket = GuacamolePacket
     { gpKeyword :: ByteString

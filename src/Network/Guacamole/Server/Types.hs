@@ -1,16 +1,15 @@
 module Network.Guacamole.Server.Types (
-                                        GuacamoleServerRequest
-                                      , TransformLayer
+                                        GuacamoleServerRequest(..)
+                                      , TransformLayer(..)
     ) where
 
+import           Universum
 
-import           Data.ByteString         (ByteString)
+import           Data.ByteString (ByteString)
 
-import           Network.Guacamole.Types (GuacamoleCapStyle,
-                                          GuacamoleCompositeMode,
-                                          GuacamoleJoinStyle, GuacamoleRGBA,
-                                          GuacamoleSize, GuacamoleTransfer,
-                                          GuacamoleXY, PipeStatus)
+import           Network.Guacamole.Types (GuacamoleCapStyle, GuacamoleCompositeMode,
+                                          GuacamoleJoinStyle, GuacamoleRGBA, GuacamoleSize,
+                                          GuacamoleTransfer, GuacamoleXY, PipeStatus)
 
 
 data GuacamoleServerRequest =

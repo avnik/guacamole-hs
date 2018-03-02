@@ -22,7 +22,18 @@ description:         Please see the README on Github at <https://github.com/avni
 dependencies:
 - base >= 4.7 && < 5
 - attoparsec
-- bytestring  
+- bytestring
+- mtl
+- scientific
+- text
+- transformers 
+- universum
+
+default-extensions: 
+- LambdaCase
+- NamedFieldPuns
+- NoImplicitPrelude
+- OverloadedStrings
 
 library:
   source-dirs: src

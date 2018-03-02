@@ -2,6 +2,8 @@
 {-# LANGUAGE LambdaCase        #-}
 module Network.Guacamole.Types where
 
+import           Universum
+
 import           Data.ByteString
 
 class GuacamoleEnumEncoding a where
