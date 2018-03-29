@@ -1,19 +1,27 @@
-module Network.Guacamole.Server.Types (
-                                        GuacamoleServerRequest(..)
-                                      , TransformLayer(..)
+{-# LANGUAGE DeriveAnyClass #-}
+{-# LANGUAGE DeriveGeneric  #-}
+
+module Network.Guacamole.Types.Server (
+                                      GuacamoleServerRequest(..)
     ) where
 
 import           Universum
 
 import           Data.ByteString (ByteString)
 
-import           Network.Guacamole.Types (GuacamoleCapStyle, GuacamoleCompositeMode,
-                                          GuacamoleJoinStyle, GuacamoleRGBA, GuacamoleSize,
-                                          GuacamoleTransfer, GuacamoleXY, PipeStatus)
+import           Network.Guacamole.Types.Core (GuacamoleRGBA (..), GuacamoleSize (..),
+                                               GuacamoleXY (..), TransformLayer (..))
+import           Network.Guacamole.Types.Enums (GuacamoleCapStyle (..), GuacamoleCompositeMode (..),
+                                                GuacamoleJoinStyle (..), GuacamoleTransfer (..))
+import           Network.Guacamole.Types.Pipes (PipeBlob (..), PipeObject (..), PipeRequest (..),
+                                                PipeRequestIndexed (..), PipeRequestNamed (..),
+                                                PipeStatus (..))
+
+import qualified Generics.SOP as SOP
 
 
 data GuacamoleServerRequest =
-    Ack
+{-    Ack
       { gsrAck :: !PipeStatus
       }
   | Args
@@ -28,13 +36,10 @@ data GuacamoleServerRequest =
       , gsrNegative   :: !Bool
       }
   | Blob
-      { gsrBlob :: !ByteString
+      { gsrBlob :: !PipeBlob
       }
   | Body
-      { gsrObject :: !Int
-      , gsrStream :: !Int
-      , gsrMime   :: !ByteString
-      , gsrName   :: !ByteString
+      { gsrBody   :: !PipeObject
       }
   | Cfill
       { gsrMode  :: !GuacamoleCompositeMode
@@ -50,7 +55,7 @@ data GuacamoleServerRequest =
   | Copy
       { gsrSourceLayer :: !Int
       , gsrSourceXY    :: !GuacamoleXY
-      , gsrH           :: !Int
+      , gsrRectSize    :: !GuacamoleSize
       , gsrW           :: !Int
       , gsrMode        :: !GuacamoleCompositeMode
       , gsrDestLayer   :: !Int
@@ -88,7 +93,7 @@ data GuacamoleServerRequest =
       , gsrMime        :: !ByteString
       , gsrFileName    :: !ByteString
       }
-  | Filesystem
+  | Filesystem -- should be in Pipes?
       { gsrFilesystemIndex :: !Int
       , gsrFilesystemName  :: !ByteString
       }
@@ -111,7 +116,9 @@ data GuacamoleServerRequest =
       , gsrSource    :: !Int
       }
   | Mouse
-      { gsrMouse            :: !GuacamoleXY
+      { gsrMouse      :: !GuacamoleXY
+      , gsrButtonMask :: !Int
+      , gsrTimestamp  :: !Int
       }
   | Move
       { gsrIndex  :: !Int
@@ -127,11 +134,8 @@ data GuacamoleServerRequest =
       }
   | Nop
   | Pipe
-      { gsrIndex :: !Int
-      , gsrMime  :: !ByteString
-      , gsrName  :: !ByteString
+      { gsrPipe :: !PipeRequestNamed
       }
-
   | Img
       { gsrStream :: !Int
       , gsrMode   :: !GuacamoleCompositeMode
@@ -175,9 +179,9 @@ data GuacamoleServerRequest =
       { gsrLayer :: !Int
       , gsrXY    :: !GuacamoleXY
       }
-  | Sync
+  | -} Sync
       { gsrTimestamp        :: !Int
-      }
+      } {-
   | Transfer
       { gsrSrcLayer  :: !Int
       , gsrSrc       :: !GuacamoleXY
@@ -193,21 +197,7 @@ data GuacamoleServerRequest =
       { gsrObject           :: !Int
       }
   | Video
-      { gsrStream :: !Int
-      , gsrLayer  :: !Int
-      , gsrMime   :: !ByteString
+      { gsrVideo :: !PipeRequestIndexed
       }
-  | Unknown
-      { gsrUnknown     :: !ByteString
-      , gsrUnknownArgs :: ![ByteString]
-      }
-
-data TransformLayer = TransformLayer
-    { tlIndex :: !Int
-    , tlA     :: !Double
-    , tlB     :: !Double
-    , tlC     :: !Double
-    , tlD     :: !Double
-    , tlE     :: !Double
-    , tlF     :: !Double
-    }
+      -}
+  deriving (Eq, Show, Generic, SOP.Generic, SOP.HasDatatypeInfo)

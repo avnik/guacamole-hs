@@ -1,42 +1,19 @@
-{-# LANGUAGE DefaultSignatures #-}
-{-# LANGUAGE LambdaCase        #-}
-module Network.Guacamole.Types where
+{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE LambdaCase    #-}
+module Network.Guacamole.Types.Enums (
+                                       GuacamoleServerStatus(..)
+                                     , GuacamoleClientStatus(..)
+                                     , GuacamoleStatusEnum(..)
+                                     , GuacamoleCapStyle(..)
+                                     , GuacamoleJoinStyle(..)
+                                     , GuacamoleCompositeMode(..)
+                                     , GuacamoleTransfer(..)
+                                    ) where
+
 
 import           Universum
 
-import           Data.ByteString
-
-class GuacamoleEnumEncoding a where
-    toGuacamoleEnum   :: Int -> a
-    fromGuacamoleEnum :: a -> Int
-
-    default toGuacamoleEnum :: Enum a => Int -> a
-    toGuacamoleEnum = toEnum
-
-    default fromGuacamoleEnum :: Enum a => a -> Int
-    fromGuacamoleEnum = fromEnum
-
-class GuacamoleValidate a where
-    validGuacamole    :: a -> Bool
-
-data GuacamoleRGBA = GuacamoleRGBA
-    { guacR :: !Int
-    , guacG :: !Int
-    , guacB :: !Int
-    , guacA :: !Int
-    } deriving (Eq, Ord, Show)
-
-data GuacamoleXY = GuacamoleXY
-    { guacX :: !Int
-    , guacY :: !Int
-    } deriving (Eq, Ord, Show)
-
-
-data GuacamoleSize = GuacamoleSize
-    { guacH :: !Int
-    , guacW :: !Int
-    } deriving (Eq, Ord, Show)
-
+import           Network.Guacamole.Types.Class (GuacamoleEnumEncoding (..))
 
 data GuacamoleServerStatus =
     ServerError
@@ -85,37 +62,6 @@ instance GuacamoleEnumEncoding GuacamoleClientStatus where
         ClientBadType -> 0x30F
         ClientTooMany -> 0x31D
         ClientUnknownCode x -> x
-
-data GuacamoleStatus = GuacamoleStatus
-    { guacStatus  :: !GuacamoleStatusEnum
-    , guacMessage :: !ByteString
-    } deriving (Eq, Show)
-
-
-data PipeStatus = PipeStatus
-    { psStream  :: !Int
-    , psStatus  :: !GuacamoleStatusEnum
-    , psMessage :: !ByteString
-    } deriving (Eq, Show)
-
-
-data PipeRequest = PipeRequest
-    { prStream :: !Int
-    , prMime   :: !Int
-    , prKind   :: !PipeKind
-    } deriving (Eq, Show)
-
-
-data PipeKind =
-    KindAudio
-  | KindVideo
-  | KindFile !ByteString
-  | KindFilesystem
-  | KindImage
-  | KindPipe !ByteString
-  | KindClipboard
-  deriving (Eq, Show)
-
 
 data GuacamoleStatusEnum =
     StatusSuccess
@@ -236,4 +182,3 @@ instance GuacamoleEnumEncoding GuacamoleJoinStyle
 instance GuacamoleEnumEncoding GuacamoleCapStyle
 instance GuacamoleEnumEncoding GuacamoleTransfer
 instance GuacamoleEnumEncoding GuacamoleCompositeMode
-

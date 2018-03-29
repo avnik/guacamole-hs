@@ -7,7 +7,7 @@ import           Universum
 import           Network.Guacamole.Parser.Internal (Parser (..), chunk, failure, float, integral,
                                                     text)
 import           Network.Guacamole.Parser.Prims (parseRGBA, parseSize, parseXY)
-import           Network.Guacamole.Server.Types (GuacamoleServerRequest (..))
+import           Network.Guacamole.Types.Server (GuacamoleServerRequest (..))
 
 serverRequestParser :: Text -> Parser GuacamoleServerRequest
 serverRequestParser = \case

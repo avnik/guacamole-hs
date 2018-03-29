@@ -1,25 +1,33 @@
-module Network.Guacamole.Client.Types (
+{-# LANGUAGE DeriveGeneric #-}
+
+module Network.Guacamole.Types.Client (
                                        GuacamoleClientRequest(..)
     ) where
 
 import           Universum
 
 import           Data.ByteString (ByteString)
-import           Network.Guacamole.Types (GuacamoleSize, GuacamoleXY, PipeRequest, PipeStatus)
+import qualified Generics.SOP as SOP
+import qualified GHC.Generics as GG
+
+import           Network.Guacamole.Types.Core (GuacamoleSize (..), GuacamoleXY (..))
+import           Network.Guacamole.Types.Pipes (PipeBlob (..), PipeRequest (..),
+                                                PipeRequestIndexed (..), PipeRequestNamed (..),
+                                                PipeStatus (..))
 
 data GuacamoleClientRequest =
     Sync
         { gcrTimestamp :: !Int
         }
-  | Mouse
+{-  | Mouse
         { gcrMouse :: !GuacamoleXY
         , gcrMask  :: !Int
-        }
+        } -}
   | Key
         { gcrKey   :: !Int
         , gcrPress :: !Int
         }
-  | Clipboard
+{-  | Clipboard
         { gcrClipboard :: !PipeRequest
         }
   | Disconnect
@@ -27,17 +35,16 @@ data GuacamoleClientRequest =
         { gcrSize      :: !GuacamoleSize
         }
   | File
-        { gcrFile      :: !PipeRequest
+        { gcrFile      :: !PipeRequestNamed
         }
   | Pipe
-        { gcrPipe :: !PipeRequest
+        { gcrPipe :: !PipeRequestNamed
         }
   | Ack
         { gcrAck  :: !PipeStatus
         }
   | Blob
-        { gcrStream :: !Int
-        , gcrBlob   :: !ByteString
+        { gcrBlob   :: !PipeBlob
         }
   | End
         { gcrStream :: !Int
@@ -53,7 +60,9 @@ data GuacamoleClientRequest =
         , gcrName   :: !ByteString
         }
   | Audio
-        { gcrAudio  :: !PipeRequest
-        }
-  deriving (Eq, Show)
+        { gcrAudio  :: !PipeRequestIndexed
+        } -}
+  deriving (Eq, Show, GG.Generic)
 
+instance SOP.Generic GuacamoleClientRequest
+instance SOP.HasDatatypeInfo GuacamoleClientRequest

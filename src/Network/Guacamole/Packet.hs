@@ -2,24 +2,26 @@
 
 module Network.Guacamole.Packet (
                                   GuacamolePacket(..)
-                                , buildGuacamolePacket
+                                , unparseGuacamolePacket
+                                , unparseGuacamolePacketStrict
                                 , parseGuacamolePacket
                                 , mkGuacamolePacket
+                                , encodeLenPrefixedBody
     )
     where
 
 import           Universum
 
-import           Data.Attoparsec.ByteString       (Parser (..), parseOnly)
+import           Data.Attoparsec.ByteString (Parser (..), parseOnly)
 import           Data.Attoparsec.ByteString.Char8 (char, decimal)
 import qualified Data.Attoparsec.ByteString.Char8 as A
-import           Data.Attoparsec.Combinator       (many')
-import           Data.ByteString                  (ByteString (..))
-import qualified Data.ByteString                  as BS8
-import           Data.ByteString.Builder          (Builder, byteString, char7,
-                                                   intDec, toLazyByteString)
-import qualified Data.ByteString.Char8            as BSC8
-import qualified Data.ByteString.Lazy             as LBS8
+import           Data.Attoparsec.Combinator (many')
+import           Data.ByteString (ByteString (..))
+import qualified Data.ByteString as BS8
+import           Data.ByteString.Builder (Builder, byteString, char7, intDec, toLazyByteString)
+import qualified Data.ByteString.Char8 as BSC8
+import qualified Data.ByteString.Lazy as LBS8
+import qualified Data.Text as T
 
 
 -- From guacamole/parser-constants.h
@@ -36,20 +38,30 @@ data GuacamolePacket = GuacamolePacket
 mkGuacamolePacket :: String -> [String] -> GuacamolePacket
 mkGuacamolePacket kw params = GuacamolePacket (BSC8.pack kw) (map BSC8.pack params)
 
-buildGuacamolePacket :: GuacamolePacket -> LBS8.ByteString
-buildGuacamolePacket = toLazyByteString . buildPacket
+unparseGuacamolePacket :: GuacamolePacket -> Either Text LBS8.ByteString
+unparseGuacamolePacket = Right . toLazyByteString . buildPacket
+
+unparseGuacamolePacketStrict :: GuacamolePacket -> Either Text ByteString
+unparseGuacamolePacketStrict = Right . LBS8.toStrict . toLazyByteString . buildPacket
 
 buildPacket :: GuacamolePacket -> Builder
-buildPacket gp = lenPrefixed (gpKeyword gp) <> foldMap lenPrefixed (gpParams gp)
+buildPacket gp = encodeLenPrefixedBody (gpKeyword gp) <> delim <>  mconcat arguments <> char7 ';'
     where
-        lenPrefixed :: ByteString -> Builder
-        lenPrefixed t = (lenP t) <> char7 '.' <> byteString t
+        arguments = intersperse delim $ encodeLenPrefixedBody <$> gpParams gp
+        delim = char7 ','
 
+encodeLenPrefixedBody :: ByteString -> Builder
+encodeLenPrefixedBody t = (lenP t) <> char7 '.' <> byteString t
+    where
         lenP :: ByteString -> Builder
         lenP = intDec . BS8.length
+{-# INLINE encodeLenPrefixedBody #-}
 
-parseGuacamolePacket :: ByteString -> Either String GuacamolePacket
-parseGuacamolePacket = parseOnly guacamoleParser
+parseGuacamolePacket :: ByteString -> Either Text GuacamolePacket
+parseGuacamolePacket bs =  case  parseOnly guacamoleParser bs of
+                             Left e  -> Left $ T.pack e
+                             Right r -> Right r
+
 
 guacamoleParser :: Parser GuacamolePacket
 guacamoleParser = GuacamolePacket <$> prefixedBody <*> many' (char ',' *> prefixedBody) <* char ';'

@@ -1,7 +1,8 @@
+{-# LANGUAGE OverloadedStrings #-}
 module Main where
 
--- import Lib
+import           Universum
 
 main :: IO ()
 main = do
-    putStrLn "test"
+    putStrLn ("test" :: String)
