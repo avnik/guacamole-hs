@@ -38,6 +38,8 @@ default-extensions:
 
 library:
   source-dirs: src
+  ghc-options:
+      - -fprint-explicit-kinds
 
 executables:
   guacamole-exe:

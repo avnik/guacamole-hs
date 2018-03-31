@@ -3,17 +3,15 @@ module Network.Guacamole.Parser.Prims (
                                       , parseSize
                                       , parseRGBA
                                       , parseTransformLayer
+                                      , parseEnum
     ) where
 
 import           Universum
 
-import           Network.Guacamole.Parser.Internal (Parser (..), chunk, float,
-                                                    integral)
-import           Network.Guacamole.Types.Class     (GuacamoleEnumEncoding (..))
-import           Network.Guacamole.Types.Core      (GuacamoleRGBA (..),
-                                                    GuacamoleSize (..),
-                                                    GuacamoleXY (..),
-                                                    TransformLayer (..))
+import           Network.Guacamole.Parser.Internal (Parser (..), chunk, float, integral)
+import           Network.Guacamole.Types.Class (GuacamoleEnumEncoding (..))
+import           Network.Guacamole.Types.Core (GuacamoleRGBA (..), GuacamoleSize (..),
+                                               GuacamoleXY (..), TransformLayer (..))
 
 parseXY :: Parser GuacamoleXY
 parseXY = GuacamoleXY <$> integral <*> integral

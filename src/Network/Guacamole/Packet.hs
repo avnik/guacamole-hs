@@ -45,9 +45,10 @@ unparseGuacamolePacketStrict :: GuacamolePacket -> Either Text ByteString
 unparseGuacamolePacketStrict = Right . LBS8.toStrict . toLazyByteString . buildPacket
 
 buildPacket :: GuacamolePacket -> Builder
-buildPacket gp = encodeLenPrefixedBody (gpKeyword gp) <> delim <>  mconcat arguments <> char7 ';'
+buildPacket gp = encodeLenPrefixedBody (gpKeyword gp) <> arguments <> char7 ';'
     where
-        arguments = intersperse delim $ encodeLenPrefixedBody <$> gpParams gp
+        arguments = foldMap singleArg $ gpParams gp
+        singleArg arg = delim <> encodeLenPrefixedBody arg
         delim = char7 ','
 
 encodeLenPrefixedBody :: ByteString -> Builder

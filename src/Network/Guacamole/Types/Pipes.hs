@@ -1,4 +1,5 @@
-{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE DeriveAnyClass #-}
+{-# LANGUAGE DeriveGeneric  #-}
 module Network.Guacamole.Types.Pipes (
                                        PipeStatus(..)
                                      , PipeRequest(..)
@@ -11,8 +12,7 @@ module Network.Guacamole.Types.Pipes (
 import           Universum
 
 import           Data.ByteString
-import qualified Generics.SOP                  as GS
-import qualified GHC.Generics                  as GG
+import qualified Generics.SOP as SOP
 
 import           Network.Guacamole.Types.Enums (GuacamoleStatusEnum (..))
 
@@ -20,31 +20,31 @@ data PipeStatus = PipeStatus
     { psStream  :: !Int
     , psMessage :: !ByteString
     , psStatus  :: !GuacamoleStatusEnum
-    } deriving (Eq, Show, GG.Generic)
+    } deriving (Eq, Show, Generic, SOP.Generic, SOP.HasDatatypeInfo)
 
 
 data PipeRequest = PipeRequest
     { prStream :: !Int
     , prMime   :: !ByteString
-    } deriving (Eq, Show, GG.Generic)
+    } deriving (Eq, Show, Generic, SOP.Generic, SOP.HasDatatypeInfo)
 
 data PipeRequestNamed = PipeRequestNamed
     { prnStream :: !Int
     , prnName   :: !ByteString
     , prnMime   :: !ByteString
-    } deriving (Eq, Show, GG.Generic)
+    } deriving (Eq, Show, Generic, SOP.Generic, SOP.HasDatatypeInfo)
 
 data PipeRequestIndexed = PipeRequestIndexed
     { priStream :: !Int
     , priIndex  :: !Int
     , priMime   :: !ByteString
-    } deriving (Eq, Show, GG.Generic)
+    } deriving (Eq, Show, Generic, SOP.Generic, SOP.HasDatatypeInfo)
 
 
 data PipeBlob = PipeBlob
     { pbStream :: !Int
     , pbBlob   :: !ByteString
-    } deriving (Eq, Show, GG.Generic)
+    } deriving (Eq, Show, Generic, SOP.Generic, SOP.HasDatatypeInfo)
 
 -- "body" command
 data PipeObject = PipeObject
@@ -52,7 +52,7 @@ data PipeObject = PipeObject
     , poStream   :: !Int
     , poMimeType :: !ByteString
     , poName     :: !ByteString
-    } deriving (Eq, Show, GG.Generic)
+    } deriving (Eq, Show, Generic, SOP.Generic, SOP.HasDatatypeInfo)
 
 data PipeKind =
     KindAudio
@@ -62,12 +62,4 @@ data PipeKind =
   | KindImage
   | KindPipe !ByteString
   | KindClipboard
-  deriving (Eq, Show, GG.Generic)
-
-
-instance GS.Generic PipeRequest
-instance GS.Generic PipeRequestNamed
-instance GS.Generic PipeRequestIndexed
-instance GS.Generic PipeStatus
-instance GS.Generic PipeBlob
-instance GS.Generic PipeObject
+  deriving (Eq, Show, Generic, SOP.Generic, SOP.HasDatatypeInfo)

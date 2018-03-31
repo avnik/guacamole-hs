@@ -1,5 +1,7 @@
-{-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE LambdaCase    #-}
+{-# LANGUAGE DeriveAnyClass #-}
+{-# LANGUAGE DeriveGeneric  #-}
+{-# LANGUAGE LambdaCase     #-}
+
 module Network.Guacamole.Types.Enums (
                                        GuacamoleServerStatus(..)
                                      , GuacamoleClientStatus(..)
@@ -12,6 +14,8 @@ module Network.Guacamole.Types.Enums (
 
 
 import           Universum
+
+import qualified Generics.SOP as SOP
 
 import           Network.Guacamole.Types.Class (GuacamoleEnumEncoding (..))
 
@@ -93,13 +97,13 @@ data GuacamoleCapStyle =
     GUAC_LINE_CAP_BUTT
   | GUAC_LINE_CAP_ROUND
   | GUAC_LINE_CAP_SQUARE
-  deriving (Eq, Show, Enum)
+  deriving (Eq, Show, Enum, Generic, SOP.Generic, SOP.HasDatatypeInfo, GuacamoleEnumEncoding)
 
 data GuacamoleJoinStyle =
     GUAC_LINE_JOIN_BEVEL
   | GUAC_LINE_JOIN_MITER
   | GUAC_LINE_JOIN_ROUND
-  deriving (Eq, Show, Enum)
+  deriving (Eq, Show, Enum, Generic, SOP.Generic, SOP.HasDatatypeInfo, GuacamoleEnumEncoding)
 
 data GuacamoleCompositeMode =
 -- * A: Source where destination transparent = S n D'
@@ -125,7 +129,7 @@ data GuacamoleCompositeMode =
   | GUAC_COMP_RATOP_ADD -- 0x0D  /* 0111 - Additive ATOP (Unimplemented in client) */
   | GUAC_COMP_OVER      -- 0x0E  /* 1110 - Draw normally                           */
   | GUAC_COMP_PLUS      -- 0x0F  /* 1111 - Add                                     */
-  deriving (Eq, Show, Enum)
+  deriving (Eq, Show, Enum, Generic, SOP.Generic, SOP.HasDatatypeInfo, GuacamoleEnumEncoding)
 --    /* Bitwise composite operations (binary) */
 --    /*
 --     * A: S' & D'
@@ -176,9 +180,5 @@ data GuacamoleTransfer =
  |  GUAC_TRANSFER_BINARY_NAND   --     = 0xE, /* 1110 */
     --  Constant functions
  |  GUAC_TRANSFER_BINARY_WHITE  --     = 0xF, /* 1111 */
- deriving (Eq, Show, Enum)
+ deriving (Eq, Show, Enum, Generic, SOP.Generic, SOP.HasDatatypeInfo, GuacamoleEnumEncoding)
 
-instance GuacamoleEnumEncoding GuacamoleJoinStyle
-instance GuacamoleEnumEncoding GuacamoleCapStyle
-instance GuacamoleEnumEncoding GuacamoleTransfer
-instance GuacamoleEnumEncoding GuacamoleCompositeMode

@@ -1,10 +1,12 @@
 {-# LANGUAGE DefaultSignatures #-}
 
 module Network.Guacamole.Types.Class (
-                                        GuacamoleEnumEncoding(..)
+                                       GuacamoleEnumEncoding(..)
                                      ) where
 
 import           Universum
+
+import qualified Data.ByteString.Char8 as BS8
 
 class GuacamoleEnumEncoding a where
     toGuacamoleEnum   :: Int -> a
@@ -19,6 +21,4 @@ class GuacamoleEnumEncoding a where
 -- | FIXME: do we need it?
 class GuacamoleValidate a where
     validGuacamole    :: a -> Bool
-
-
 

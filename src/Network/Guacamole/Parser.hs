@@ -5,15 +5,15 @@ module Network.Guacamole.Parser (
 
 import           Universum
 
-import qualified Data.Text                         as T
-import qualified Data.Text.Encoding                as T
+import qualified Data.Text as T
+import qualified Data.Text.Encoding as T
 
-import           Network.Guacamole.Client.Parser   (clientRequestParser)
-import           Network.Guacamole.Packet          (GuacamolePacket (..))
+import           Network.Guacamole.Packet (GuacamolePacket (..))
+import           Network.Guacamole.Parser.Client (clientRequestParser)
 import           Network.Guacamole.Parser.Internal (Parser (..), runParser)
-import           Network.Guacamole.Server.Parser   (serverRequestParser)
-import           Network.Guacamole.Types.Client    (GuacamoleClientRequest)
-import           Network.Guacamole.Types.Server    (GuacamoleServerRequest)
+import           Network.Guacamole.Server.Parser (serverRequestParser)
+import           Network.Guacamole.Types.Client (GuacamoleClientRequest)
+import           Network.Guacamole.Types.Server (GuacamoleServerRequest)
 
 
 parseClientRequest :: GuacamolePacket -> Either Text GuacamoleClientRequest

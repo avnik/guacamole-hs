@@ -21,7 +21,7 @@ import qualified Generics.SOP as SOP
 
 
 data GuacamoleServerRequest =
-{-    Ack
+    Ack
       { gsrAck :: !PipeStatus
       }
   | Args
@@ -179,9 +179,9 @@ data GuacamoleServerRequest =
       { gsrLayer :: !Int
       , gsrXY    :: !GuacamoleXY
       }
-  | -} Sync
+  |  Sync
       { gsrTimestamp        :: !Int
-      } {-
+      }
   | Transfer
       { gsrSrcLayer  :: !Int
       , gsrSrc       :: !GuacamoleXY
@@ -199,5 +199,5 @@ data GuacamoleServerRequest =
   | Video
       { gsrVideo :: !PipeRequestIndexed
       }
-      -}
+
   deriving (Eq, Show, Generic, SOP.Generic, SOP.HasDatatypeInfo)

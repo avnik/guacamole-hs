@@ -1,4 +1,5 @@
 {-# LANGUAGE DefaultSignatures #-}
+{-# LANGUAGE DeriveAnyClass    #-}
 {-# LANGUAGE DeriveGeneric     #-}
 {-# LANGUAGE LambdaCase        #-}
 module Network.Guacamole.Types.Core (
@@ -11,8 +12,7 @@ module Network.Guacamole.Types.Core (
 import           Universum
 
 import           Data.ByteString
-import qualified Generics.SOP                  as GS
-import qualified GHC.Generics                  as GG
+import qualified Generics.SOP as SOP
 
 import           Network.Guacamole.Types.Enums (GuacamoleStatusEnum (..))
 
@@ -21,24 +21,24 @@ data GuacamoleRGBA = GuacamoleRGBA
     , guacG :: !Int
     , guacB :: !Int
     , guacA :: !Int
-    } deriving (Eq, Ord, Show, GG.Generic)
+    } deriving (Eq, Ord, Show, Generic, SOP.Generic, SOP.HasDatatypeInfo)
 
 data GuacamoleXY = GuacamoleXY
     { guacX :: !Int
     , guacY :: !Int
-    } deriving (Eq, Ord, Show, GG.Generic)
+    } deriving (Eq, Ord, Show, Generic, SOP.Generic, SOP.HasDatatypeInfo)
 
 
 data GuacamoleSize = GuacamoleSize
     { guacH :: !Int
     , guacW :: !Int
-    } deriving (Eq, Ord, Show, GG.Generic)
+    } deriving (Eq, Ord, Show, Generic, SOP.Generic, SOP.HasDatatypeInfo)
 
 
 data GuacamoleStatus = GuacamoleStatus
     { guacStatus  :: !GuacamoleStatusEnum
     , guacMessage :: !ByteString
-    } deriving (Eq, Show, GG.Generic)
+    } deriving (Eq, Show, Generic, SOP.Generic, SOP.HasDatatypeInfo)
 
 data TransformLayer = TransformLayer
     { tlIndex :: !Int
@@ -48,10 +48,5 @@ data TransformLayer = TransformLayer
     , tlD     :: !Double
     , tlE     :: !Double
     , tlF     :: !Double
-    } deriving (Eq, Show, GG.Generic)
+    } deriving (Eq, Show, Generic, SOP.Generic, SOP.HasDatatypeInfo)
 
-instance GS.Generic GuacamoleXY
-instance GS.Generic GuacamoleSize
-instance GS.Generic GuacamoleRGBA
-instance GS.Generic GuacamoleStatus
-instance GS.Generic TransformLayer

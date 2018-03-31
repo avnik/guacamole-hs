@@ -19,15 +19,15 @@ data GuacamoleClientRequest =
     Sync
         { gcrTimestamp :: !Int
         }
-{-  | Mouse
+  | Mouse
         { gcrMouse :: !GuacamoleXY
         , gcrMask  :: !Int
-        } -}
+        }
   | Key
         { gcrKey   :: !Int
         , gcrPress :: !Int
         }
-{-  | Clipboard
+  | Clipboard
         { gcrClipboard :: !PipeRequest
         }
   | Disconnect
@@ -61,7 +61,7 @@ data GuacamoleClientRequest =
         }
   | Audio
         { gcrAudio  :: !PipeRequestIndexed
-        } -}
+        }
   deriving (Eq, Show, GG.Generic)
 
 instance SOP.Generic GuacamoleClientRequest
